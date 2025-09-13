@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Checkbox } from "@heroui/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Checkbox, Chip } from "@heroui/react";
 import { FileUpload } from "@/components/application/file-upload/file-upload-base";
 import * as XLSX from 'xlsx';
 import Papa from 'papaparse';
@@ -707,22 +707,28 @@ export default function Home() {
                 {/* Column Preview */}
                 {file.headers && file.headers.length > 0 && (
                   <div className="mt-2">
-                    <p className="text-xs font-medium text-gray-700 mb-1">
+                    <p className="text-xs font-medium text-foreground mb-1">
                       Columns ({file.headers.length}):
                     </p>
                     <div className="flex flex-wrap gap-1">
                       {file.headers.slice(0, 6).map((header, headerIndex) => (
-                        <span 
+                        <Chip 
                           key={headerIndex}
-                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs"
+                          size="sm"
+                          variant="flat"
+                          color="default"
                         >
                           {header}
-                        </span>
+                        </Chip>
                       ))}
                       {file.headers.length > 6 && (
-                        <span className="px-2 py-1 bg-gray-100 text-gray-500 rounded text-xs">
+                        <Chip 
+                          size="sm"
+                          variant="flat"
+                          color="default"
+                        >
                           +{file.headers.length - 6} more
-                        </span>
+                        </Chip>
                       )}
                     </div>
                   </div>
@@ -757,9 +763,9 @@ export default function Home() {
                     </p>
                     <div className="flex flex-wrap gap-1">
                       {keptColumns.map((col, idx) => (
-                        <span key={idx} className="px-2 py-1 bg-success/10 text-success rounded text-xs">
+                        <Chip key={idx} size="sm" variant="flat" color="success">
                           {col}
-                        </span>
+                        </Chip>
                       ))}
                     </div>
                   </div>
@@ -771,9 +777,9 @@ export default function Home() {
                       </p>
                       <div className="flex flex-wrap gap-1">
                         {removedColumns.map((col, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-danger/10 text-danger rounded text-xs">
+                          <Chip key={idx} size="sm" variant="flat" color="danger">
                             {col}
-                          </span>
+                          </Chip>
                         ))}
                       </div>
                     </div>
@@ -1072,8 +1078,8 @@ export default function Home() {
                     isActiveStep 
                       ? 'shadow-2xl scale-[1.02] border-none' 
                       : isCompletedStep
-                        ? 'shadow-md opacity-75 scale-[0.98] blur-sm'
-                        : 'shadow-lg opacity-60 scale-[0.96] blur-sm'
+                        ? 'shadow-md opacity-75 scale-[0.98] backdrop-blur-sm'
+                        : 'shadow-lg opacity-60 scale-[0.96] backdrop-blur-sm'
                   }`}
                   radius="lg"
                 >
