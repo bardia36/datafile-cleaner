@@ -786,127 +786,107 @@ export default function Home() {
 
         {/* Cleaning Options */}
         <div className="mt-4">
-          <h4 className="font-medium text-foreground mb-3">Data Cleaning Options</h4>
-          <p className="text-sm text-foreground-600 mb-4">Select the cleaning operations you want to apply to your data:</p>
+          <h4 className="text-sm font-medium text-foreground mb-2">Data Cleaning Options</h4>
+          <p className="text-xs text-foreground-600 mb-3">Select the cleaning operations you want to apply to your data:</p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <Checkbox
               isSelected={cleaningOptions.removeDuplicates}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, removeDuplicates: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Remove Duplicates</span>
-                <p className="text-xs text-gray-500">Remove identical rows</p>
-              </div>
+              <span className="text-sm font-medium">Remove Duplicates</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.removeEmptyRows}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, removeEmptyRows: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Remove Empty Rows</span>
-                <p className="text-xs text-gray-500">Remove rows with no data</p>
-              </div>
+              <span className="text-sm font-medium">Remove Empty Rows</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.removeEmptyColumns}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, removeEmptyColumns: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Remove Empty Columns</span>
-                <p className="text-xs text-gray-500">Remove columns with no data</p>
-              </div>
+              <span className="text-sm font-medium">Remove Empty Columns</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.trimWhitespace}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, trimWhitespace: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Trim Whitespace</span>
-                <p className="text-xs text-gray-500">Remove leading/trailing spaces</p>
-              </div>
+              <span className="text-sm font-medium">Trim Whitespace</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.normalizeText}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, normalizeText: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Normalize Text</span>
-                <p className="text-xs text-gray-500">Standardize text formatting</p>
-              </div>
+              <span className="text-sm font-medium">Normalize Text</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.removeSpecialCharacters}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, removeSpecialCharacters: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Remove Special Characters</span>
-                <p className="text-xs text-gray-500">Remove non-alphanumeric chars</p>
-              </div>
+              <span className="text-sm font-medium">Remove Special Characters</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.standardizeDates}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, standardizeDates: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Standardize Dates</span>
-                <p className="text-xs text-gray-500">Convert dates to standard format</p>
-              </div>
+              <span className="text-sm font-medium">Standardize Dates</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.convertToUppercase}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, convertToUppercase: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Convert to Uppercase</span>
-                <p className="text-xs text-gray-500">Convert text to UPPERCASE</p>
-              </div>
+              <span className="text-sm font-medium">Convert to Uppercase</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.convertToLowercase}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, convertToLowercase: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Convert to Lowercase</span>
-                <p className="text-xs text-gray-500">Convert text to lowercase</p>
-              </div>
+              <span className="text-sm font-medium">Convert to Lowercase</span>
             </Checkbox>
             
             <Checkbox
               isSelected={cleaningOptions.removeLeadingZeros}
               onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, removeLeadingZeros: value }))}
               color="primary"
+              size="sm"
             >
-              <div>
-                <span className="font-medium">Remove Leading Zeros</span>
-                <p className="text-xs text-gray-500">Remove zeros at start of numbers</p>
-              </div>
+              <span className="text-sm font-medium">Remove Leading Zeros</span>
             </Checkbox>
           </div>
           
-          <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+          <div className="mt-4 p-3 bg-content2 rounded-lg">
             <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-foreground-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-foreground-600">
                 No cleaning options are selected by default. Choose the operations that best suit your data.
               </span>
             </div>
@@ -931,41 +911,39 @@ export default function Home() {
   const renderStep3 = () => (
     <>
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Data Processing Complete</h3>
-        
         {/* Results Summary */}
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div className="bg-success/10 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-8 h-8 bg-success/20 rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
               </svg>
             </div>
-            <h4 className="font-medium text-green-800">Data Cleaning Complete!</h4>
+            <h4 className="font-medium text-success">Data Cleaning Complete!</h4>
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="bg-white rounded-lg p-3 border border-green-200">
-              <div className="text-2xl font-bold text-green-600">{cleaningResult?.totalRowsCleaned}</div>
-              <div className="text-sm text-green-700">Rows Processed</div>
+            <div className="bg-content1 rounded-lg p-3">
+              <div className="text-2xl font-bold text-success">{cleaningResult?.totalRowsCleaned}</div>
+              <div className="text-sm text-success-foreground">Rows Processed</div>
             </div>
-            <div className="bg-white rounded-lg p-3 border border-green-200">
-              <div className="text-2xl font-bold text-blue-600">{cleaningResult?.columnsDeleted}</div>
-              <div className="text-sm text-blue-700">Columns Removed</div>
+            <div className="bg-content1 rounded-lg p-3">
+              <div className="text-2xl font-bold text-primary">{cleaningResult?.columnsDeleted}</div>
+              <div className="text-sm text-primary-foreground">Columns Removed</div>
             </div>
-            <div className="bg-white rounded-lg p-3 border border-green-200">
-              <div className="text-2xl font-bold text-orange-600">{cleaningResult?.duplicateRowsRemoved}</div>
-              <div className="text-sm text-orange-700">Duplicates Removed</div>
+            <div className="bg-content1 rounded-lg p-3">
+              <div className="text-2xl font-bold text-warning">{cleaningResult?.duplicateRowsRemoved}</div>
+              <div className="text-sm text-warning-foreground">Duplicates Removed</div>
             </div>
           </div>
         </div>
 
         {/* Download Options */}
         <div className="space-y-3">
-          <h4 className="font-medium text-gray-900">Download Your Cleaned Data</h4>
-          <p className="text-sm text-gray-600">Choose your preferred format to download the processed data.</p>
+          <h4 className="font-medium text-foreground">Download Your Cleaned Data</h4>
+          <p className="text-sm text-foreground-600">Choose your preferred format to download the processed data.</p>
           <div className="grid grid-cols-2 gap-3">
           <Button 
-            color="primary" 
+            color="default" 
             className="flex-1 font-medium py-3"
             onClick={() => handleDownload('csv')}
               startContent={
@@ -977,7 +955,7 @@ export default function Home() {
               Download CSV
             </Button>
           <Button 
-            color="success" 
+            color="primary" 
             className="flex-1 font-medium py-3"
             onClick={() => handleDownload('xlsx')}
               startContent={
@@ -993,34 +971,39 @@ export default function Home() {
 
         {/* Start Over Button */}
         <div className="mt-6">
-          <Button 
-            color="default" 
-            variant="bordered"
-            className="w-full"
-            onClick={() => {
-              setCurrentStep(1);
-              setUploadedFiles([]);
-              setCleaningResult(null);
-              setError(null);
-              setIsProcessing(false);
-              setAutoAdvanceCountdown(null);
-              setCleaningOptions({
-                removeDuplicates: false,
-                removeEmptyRows: false,
-                removeEmptyColumns: false,
-                trimWhitespace: false,
-                normalizeText: false,
-                removeSpecialCharacters: false,
-                standardizeDates: false,
-                convertToUppercase: false,
-                convertToLowercase: false,
-                removeLeadingZeros: false
-              });
-              clearAllFiles();
-            }}
-          >
-            Start Over
-          </Button>
+        <Button 
+          color="default" 
+          variant="ghost"
+          className="w-full"
+          startContent={
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+          }
+          onClick={() => {
+            setCurrentStep(1);
+            setUploadedFiles([]);
+            setCleaningResult(null);
+            setError(null);
+            setIsProcessing(false);
+            setAutoAdvanceCountdown(null);
+            setCleaningOptions({
+              removeDuplicates: false,
+              removeEmptyRows: false,
+              removeEmptyColumns: false,
+              trimWhitespace: false,
+              normalizeText: false,
+              removeSpecialCharacters: false,
+              standardizeDates: false,
+              convertToUppercase: false,
+              convertToLowercase: false,
+              removeLeadingZeros: false
+            });
+            clearAllFiles();
+          }}
+        >
+          Start Over
+        </Button>
         </div>
       </div>
     </>
@@ -1089,8 +1072,8 @@ export default function Home() {
                     isActiveStep 
                       ? 'shadow-2xl scale-[1.02] border-none' 
                       : isCompletedStep
-                        ? 'shadow-md opacity-75 scale-[0.98]'
-                        : 'shadow-lg opacity-60 scale-[0.96]'
+                        ? 'shadow-md opacity-75 scale-[0.98] blur-sm'
+                        : 'shadow-lg opacity-60 scale-[0.96] blur-sm'
                   }`}
                   radius="lg"
                 >
@@ -1206,9 +1189,9 @@ export default function Home() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: 0.1 }}
-                          className="p-3 bg-gray-50 border border-gray-200 rounded-lg text-center"
+                          className="p-3 bg-content2 rounded-lg text-center"
                         >
-                          <div className="flex items-center justify-center gap-2 text-gray-500">
+                          <div className="flex items-center justify-center gap-2 text-foreground-500">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                             </svg>
@@ -1231,7 +1214,12 @@ export default function Home() {
         <img 
           src="/assets/images/cat.svg" 
           alt="Cat" 
-          className="w-20 h-20 opacity-80 hover:opacity-100 transition-opacity duration-300"
+          className="w-26 h-26 opacity-80 hover:opacity-100 transition-opacity duration-300 dark:hidden"
+        />
+        <img 
+          src="/assets/images/cat-light.svg" 
+          alt="Cat" 
+          className="w-26 h-26 opacity-80 hover:opacity-100 transition-opacity duration-300 hidden dark:block"
         />
       </div>
     </div>
