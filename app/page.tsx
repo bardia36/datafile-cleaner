@@ -930,15 +930,15 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="bg-content1 rounded-lg p-3">
               <div className="text-2xl font-bold text-success">{cleaningResult?.totalRowsCleaned}</div>
-              <div className="text-sm text-success-foreground">Rows Processed</div>
+              <div className="text-sm text-foreground-600">Rows Processed</div>
             </div>
             <div className="bg-content1 rounded-lg p-3">
               <div className="text-2xl font-bold text-primary">{cleaningResult?.columnsDeleted}</div>
-              <div className="text-sm text-primary-foreground">Columns Removed</div>
+              <div className="text-sm text-foreground-600">Columns Removed</div>
             </div>
             <div className="bg-content1 rounded-lg p-3">
               <div className="text-2xl font-bold text-warning">{cleaningResult?.duplicateRowsRemoved}</div>
-              <div className="text-sm text-warning-foreground">Duplicates Removed</div>
+              <div className="text-sm text-foreground-600">Duplicates Removed</div>
             </div>
           </div>
         </div>
@@ -1006,6 +1006,8 @@ export default function Home() {
               removeLeadingZeros: false
             });
             clearAllFiles();
+            // Clear all localStorage cache
+            localStorage.clear();
           }}
         >
           Start Over
