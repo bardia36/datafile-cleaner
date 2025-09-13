@@ -1,0 +1,11 @@
+Name,Email,Phone,Age,Department,Salary,Location,Start_Date
+John Doe,john.doe@email.com,555-1234,30,Engineering,75000,New York,2022-01-15
+Jane Smith,jane.smith@email.com,555-5678,28,Marketing,65000,Los Angeles,2022-03-10
+Bob Johnson,bob.johnson@email.com,555-9012,35,Engineering,80000,New York,2021-11-20
+Alice Brown,alice.brown@email.com,555-3456,32,HR,60000,Chicago,2022-02-01
+John Doe,john.doe@email.com,555-1234,30,Engineering,75000,New York,2022-01-15
+Charlie Wilson,charlie.wilson@email.com,555-7890,29,Marketing,62000,Los Angeles,2022-04-15
+David Lee,david.lee@email.com,555-2468,33,Engineering,78000,Seattle,2021-12-01
+Sarah Davis,sarah.davis@email.com,555-1357,27,Design,58000,San Francisco,2022-05-01
+Bob Johnson,bob.johnson@email.com,555-9012,35,Engineering,80000,New York,2021-11-20
+Emma Martinez,emma.martinez@email.com,555-8642,31,HR,61000,Miami,2022-01-30
