@@ -630,6 +630,7 @@ export default function Home() {
                     progress={100}
                     type={getFileExtension(file.name).toLowerCase() as any}
                     onDelete={() => removeFile(fileIndex)}
+                    hideProgressText={true}
                   />
                   
                   {/* File Info */}
@@ -1155,7 +1156,12 @@ export default function Home() {
       
       <div className="w-full max-w-2xl flex-1 flex flex-col justify-center">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground drop-shadow-lg mb-2">Data Cleaner</h1>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <h1 className="text-4xl font-bold text-foreground drop-shadow-lg">Data Cleaner</h1>
+            <span className="px-2 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+              v1.2.0
+            </span>
+          </div>
           <p className="text-lg text-foreground/80 drop-shadow">
             {currentStep === 1 && "Upload your files to get started"}
             {currentStep === 2 && "Review and configure your data transformation"}
