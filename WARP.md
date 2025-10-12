@@ -91,16 +91,20 @@ The application automatically assigns file roles based on:
 ### Column Cleaning Process
 1. **Template Matching**: Keeps only columns that exist in both data and template files
 2. **Order Preservation**: Final output follows template file column order
-3. **Configurable Options**: 10 different cleaning operations (all optional)
+3. **Configurable Options**: 11 different cleaning operations (9 active, 2 disabled placeholders)
 
 ### Cleaning Options Available
 - Remove duplicate rows (exact match comparison)
 - Remove empty rows/columns
 - Trim whitespace from cells
 - Text case conversion (upper/lower)
-- Remove special characters
+- Remove special characters (keeps only alphanumeric characters and spaces)
 - Remove leading zeros from numeric strings
-- Date standardization (placeholder for future implementation)
+- Replace N/A values with zero (handles 'N/A', 'None', '#N/A', etc.)
+- Replace dashes with zero
+- Remove currency symbols (supports multiple currencies: $, €, £, ¥, ₹, etc.)
+- Normalize text (disabled - placeholder for future implementation)
+- Standardize dates (disabled - placeholder for future implementation)
 
 ## File Processing Specifications
 
@@ -133,6 +137,10 @@ The application automatically assigns file roles based on:
 - **Progressive Disclosure**: Only current step content is fully visible
 - **Status Indicators**: Visual feedback for step completion and current focus
 - **Responsive Design**: Works across all screen sizes with touch support
+- **Theme Toggle**: Interactive cat element for switching between light/dark modes
+- **Progress Tracking**: Fixed progress indicator positioned above the cat
+- **Expandable Previews**: Column previews with expand/collapse for large datasets
+- **Quick Actions**: "Check All" button for rapid cleaning option selection
 
 ## Testing Strategy
 

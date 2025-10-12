@@ -6,6 +6,7 @@ import { FileUpload } from "@/components/application/file-upload/file-upload-bas
 import * as XLSX from 'xlsx';
 import Papa from 'papaparse';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from "next-themes";
 
 const ChevronDownIcon = ({ className }: { className?: string }) => (
   <svg
@@ -47,6 +48,7 @@ interface CleaningResult {
 }
 
 export default function Home() {
+  const { theme, setTheme } = useTheme();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [cleaningResult, setCleaningResult] = useState<CleaningResult | null>(null);
@@ -63,7 +65,14 @@ export default function Home() {
     standardizeDates: false,
     convertToUppercase: false,
     convertToLowercase: false,
-    removeLeadingZeros: false
+    removeLeadingZeros: false,
+    replaceDashesWithZero: false,
+    replaceNAValuesWithZero: false,
+    removeCurrencySymbols: false
+  });
+  const [expandedColumns, setExpandedColumns] = useState({
+    kept: false,
+    removed: false
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -423,13 +432,18 @@ export default function Home() {
       }
       
       // Apply text transformations if requested
-      if (options.trimWhitespace || options.convertToUppercase || options.convertToLowercase || options.removeSpecialCharacters || options.removeLeadingZeros) {
+      if (options.trimWhitespace || options.convertToUppercase || options.convertToLowercase || options.removeSpecialCharacters || options.removeLeadingZeros || options.replaceDashesWithZero || options.replaceNAValuesWithZero || options.removeCurrencySymbols) {
         dataRows = dataRows.map(row => 
           row.map(cell => {
             let cellValue = cell?.toString() || '';
             
             if (options.trimWhitespace) {
               cellValue = cellValue.trim();
+            }
+            
+            if (options.removeCurrencySymbols) {
+              // Remove common currency symbols: $, €, £, ¥, ₹, ₽, ¢, ₩, etc.
+              cellValue = cellValue.replace(/[$€£¥₹₽¢₩₨₪₦₡₵₴₸₺₼₾₿]/g, '');
             }
             
             if (options.convertToUppercase) {
@@ -444,6 +458,17 @@ export default function Home() {
             
             if (options.removeLeadingZeros && /^0+\d/.test(cellValue)) {
               cellValue = cellValue.replace(/^0+/, '');
+            }
+            
+            if (options.replaceDashesWithZero && cellValue === '-') {
+              cellValue = '0';
+            }
+            
+            if (options.replaceNAValuesWithZero) {
+              const naValues = ['N/A', 'None', '#N/A', 'Net/Net or BAI', 'Not Included'];
+              if (naValues.includes(cellValue)) {
+                cellValue = '0';
+              }
             }
             
             return cellValue;
@@ -481,12 +506,15 @@ export default function Home() {
       
       const result = cleanData(dataFile, templateFile, cleaningOptions);
       
+      // Set both states and immediately transition to step 3
       setCleaningResult(result);
-      handleStepChange(3);
+      setIsProcessing(false);
+      setCurrentStep(3);
+      setAutoAdvanceCountdown(null);
+      scrollToCard(3);
     } catch (error) {
       console.error('Error cleaning data:', error);
       setError(`Failed to process data: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    } finally {
       setIsProcessing(false);
     }
   };
@@ -521,6 +549,42 @@ export default function Home() {
       XLSX.utils.book_append_sheet(wb, ws, 'Cleaned Data');
       XLSX.writeFile(wb, `${filename}.xlsx`);
     }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  const renderColumnChips = (columns: string[], type: 'kept' | 'removed', maxVisible: number = 6) => {
+    const isExpanded = expandedColumns[type];
+    const visibleColumns = isExpanded ? columns : columns.slice(0, maxVisible);
+    const hasMore = columns.length > maxVisible;
+
+    return (
+      <div className="flex flex-wrap gap-1">
+        {visibleColumns.map((col, idx) => (
+          <Chip 
+            key={idx} 
+            size="sm" 
+            variant="flat" 
+            color={type === 'kept' ? 'success' : 'danger'}
+          >
+            {col}
+          </Chip>
+        ))}
+        {hasMore && (
+          <Button
+            size="sm"
+            variant="light"
+            color={type === 'kept' ? 'success' : 'danger'}
+            className="h-6 px-2 text-xs min-w-0"
+            onClick={() => setExpandedColumns(prev => ({ ...prev, [type]: !prev[type] }))}
+          >
+            {isExpanded ? 'Show Less' : `+${columns.length - maxVisible} more`}
+          </Button>
+        )}
+      </div>
+    );
   };
 
   const renderStep1 = () => (
@@ -761,13 +825,7 @@ export default function Home() {
                     <p className="text-sm font-medium text-success mb-1">
                       Columns to keep ({keptColumns.length}):
                     </p>
-                    <div className="flex flex-wrap gap-1">
-                      {keptColumns.map((col, idx) => (
-                        <Chip key={idx} size="sm" variant="flat" color="success">
-                          {col}
-                        </Chip>
-                      ))}
-                    </div>
+                    {renderColumnChips(keptColumns, 'kept')}
                   </div>
                   
                   {removedColumns.length > 0 && (
@@ -775,13 +833,7 @@ export default function Home() {
                       <p className="text-sm font-medium text-danger mb-1">
                         Columns to remove ({removedColumns.length}):
                       </p>
-                      <div className="flex flex-wrap gap-1">
-                        {removedColumns.map((col, idx) => (
-                          <Chip key={idx} size="sm" variant="flat" color="danger">
-                            {col}
-                          </Chip>
-                        ))}
-                      </div>
+                      {renderColumnChips(removedColumns, 'removed')}
                     </div>
                   )}
                 </div>
@@ -792,7 +844,32 @@ export default function Home() {
 
         {/* Cleaning Options */}
         <div className="mt-4">
-          <h4 className="text-sm font-medium text-foreground mb-2">Data Cleaning Options</h4>
+          <div className="flex items-center justify-between mb-2">
+            <h4 className="text-sm font-medium text-foreground">Data Cleaning Options</h4>
+            <Button
+              size="sm"
+              variant="bordered"
+              color="primary"
+              onClick={() => setCleaningOptions({
+                removeDuplicates: true,
+                removeEmptyRows: true,
+                removeEmptyColumns: true,
+                trimWhitespace: true,
+                normalizeText: false,
+                removeSpecialCharacters: true,
+                standardizeDates: false,
+                convertToUppercase: true,
+                convertToLowercase: false,
+                removeLeadingZeros: true,
+                replaceDashesWithZero: true,
+                replaceNAValuesWithZero: true,
+                removeCurrencySymbols: true
+              })}
+              className="text-xs"
+            >
+              Check All
+            </Button>
+          </div>
           <p className="text-xs text-foreground-600 mb-3">Select the cleaning operations you want to apply to your data:</p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -833,12 +910,30 @@ export default function Home() {
             </Checkbox>
             
             <Checkbox
-              isSelected={cleaningOptions.normalizeText}
-              onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, normalizeText: value }))}
+              isSelected={cleaningOptions.removeCurrencySymbols}
+              onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, removeCurrencySymbols: value }))}
               color="primary"
               size="sm"
             >
-              <span className="text-sm font-medium">Normalize Text</span>
+              <span className="text-sm font-medium">Remove Currency Symbols</span>
+            </Checkbox>
+            
+            <Checkbox
+              isSelected={cleaningOptions.replaceNAValuesWithZero}
+              onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, replaceNAValuesWithZero: value }))}
+              color="primary"
+              size="sm"
+            >
+              <span className="text-sm font-medium">Replace N/A Values with Zero</span>
+            </Checkbox>
+            
+            <Checkbox
+              isSelected={cleaningOptions.replaceDashesWithZero}
+              onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, replaceDashesWithZero: value }))}
+              color="primary"
+              size="sm"
+            >
+              <span className="text-sm font-medium">Replace Dashes with Zero</span>
             </Checkbox>
             
             <Checkbox
@@ -848,15 +943,6 @@ export default function Home() {
               size="sm"
             >
               <span className="text-sm font-medium">Remove Special Characters</span>
-            </Checkbox>
-            
-            <Checkbox
-              isSelected={cleaningOptions.standardizeDates}
-              onValueChange={(value) => setCleaningOptions(prev => ({ ...prev, standardizeDates: value }))}
-              color="primary"
-              size="sm"
-            >
-              <span className="text-sm font-medium">Standardize Dates</span>
             </Checkbox>
             
             <Checkbox
@@ -884,6 +970,24 @@ export default function Home() {
               size="sm"
             >
               <span className="text-sm font-medium">Remove Leading Zeros</span>
+            </Checkbox>
+            
+            <Checkbox
+              isSelected={false}
+              isDisabled={true}
+              color="default"
+              size="sm"
+            >
+              <span className="text-sm font-medium text-default-400">Normalize Text</span>
+            </Checkbox>
+            
+            <Checkbox
+              isSelected={false}
+              isDisabled={true}
+              color="default"
+              size="sm"
+            >
+              <span className="text-sm font-medium text-default-400">Standardize Dates</span>
             </Checkbox>
           </div>
           
@@ -1003,7 +1107,10 @@ export default function Home() {
               standardizeDates: false,
               convertToUppercase: false,
               convertToLowercase: false,
-              removeLeadingZeros: false
+              removeLeadingZeros: false,
+              replaceDashesWithZero: false,
+              replaceNAValuesWithZero: false,
+              removeCurrencySymbols: false
             });
             clearAllFiles();
             // Clear all localStorage cache
@@ -1028,6 +1135,24 @@ export default function Home() {
         backgroundAttachment: 'fixed'
       }}
     >
+      {/* Progress indicator above the cat */}
+      <div className="fixed bottom-32 right-4 z-50">
+        <div className="flex items-center gap-2 bg-content1/20 backdrop-blur-sm rounded-full px-4 py-2">
+          <span className="text-foreground text-sm">Progress:</span>
+          <div className="flex gap-1">
+            {[1, 2, 3].map((step) => (
+              <div
+                key={step}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  step <= currentStep ? 'bg-foreground' : 'bg-foreground/30'
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-foreground text-sm">{currentStep}/3</span>
+        </div>
+      </div>
+      
       <div className="w-full max-w-2xl flex-1 flex flex-col justify-center">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-foreground drop-shadow-lg mb-2">Data Cleaner</h1>
@@ -1036,22 +1161,6 @@ export default function Home() {
             {currentStep === 2 && "Review and configure your data transformation"}
             {currentStep === 3 && "Download your cleaned data"}
           </p>
-          <div className="flex justify-center mt-4">
-            <div className="flex items-center gap-2 bg-content1/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span className="text-foreground text-sm">Progress:</span>
-              <div className="flex gap-1">
-                {[1, 2, 3].map((step) => (
-                  <div
-                    key={step}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      step <= currentStep ? 'bg-foreground' : 'bg-foreground/30'
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-foreground text-sm">{currentStep}/3</span>
-            </div>
-          </div>
         </div>
         
         <div className="space-y-6">
@@ -1217,18 +1326,29 @@ export default function Home() {
         </div>
       </div>
       
-      {/* Cat SVG fixed to viewport */}
-      <div className="fixed bottom-4 right-4 z-50">
-        <img 
-          src="/assets/images/cat.svg" 
-          alt="Cat" 
-          className="w-26 h-26 opacity-80 hover:opacity-100 transition-opacity duration-300 dark:hidden"
-        />
-        <img 
-          src="/assets/images/cat-light.svg" 
-          alt="Cat" 
-          className="w-26 h-26 opacity-80 hover:opacity-100 transition-opacity duration-300 hidden dark:block"
-        />
+      {/* Cat SVG fixed to viewport - Theme Toggle */}
+      <div 
+        className="fixed bottom-4 right-4 z-50 cursor-pointer" 
+        style={{ marginBottom: '-20px', marginRight: '30px' }}
+        onClick={toggleTheme}
+        title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      >
+        <div className="relative group">
+          <img 
+            src="/assets/images/cat.svg" 
+            alt="Cat - Click to toggle theme" 
+            className="w-26 h-26 opacity-80 hover:opacity-100 transition-all duration-300 dark:hidden hover:scale-110 hover:rotate-3"
+          />
+          <img 
+            src="/assets/images/cat-light.svg" 
+            alt="Cat - Click to toggle theme" 
+            className="w-26 h-26 opacity-80 hover:opacity-100 transition-all duration-300 hidden dark:block hover:scale-110 hover:rotate-3"
+          />
+          {/* Tooltip */}
+          <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-content1 text-foreground text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+            {theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+          </div>
+        </div>
       </div>
     </div>
   );

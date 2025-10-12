@@ -8,16 +8,28 @@ A powerful, user-friendly web-based data cleaning tool that standardizes data by
 - Remove unwanted columns based on template comparison
 - Eliminate duplicate rows with intelligent detection
 - Support for both CSV and Excel (.xlsx) formats
+- **NEW**: 11 comprehensive cleaning options including:
+  - Remove currency symbols, special characters, and leading zeros
+  - Replace N/A values and dashes with zeros
+  - Text case conversion and whitespace trimming
+  - Empty row and column removal
 
 🎯 **Three-Step Process**
 1. **File Upload**: Drag-and-drop or browse to upload data and template files
-2. **Template Selection**: Auto-detection with manual override options
+2. **Template Selection**: Auto-detection with manual override options and cleaning configuration
 3. **Download**: Get cleaned data in CSV or Excel format
 
 📊 **Intelligent Template Detection**
 - Automatically selects file with fewer rows as template
 - Falls back to smaller file size if row counts are equal
 - Manual override available for custom selection
+
+🎨 **Enhanced User Experience**
+- **NEW**: Interactive theme toggle (click the cat to switch dark/light mode)
+- **NEW**: Progress indicator positioned above the cat
+- **NEW**: Expandable column preview for large datasets
+- **NEW**: "Check All" button for quick cleaning option selection
+- Smooth animations and responsive design
 
 ## Technology Stack
 
@@ -74,7 +86,14 @@ npm run dev
    - If row counts are equal, smaller file is selected
 3. You can manually override the selection by clicking on a different file
 4. Review the column preview showing which columns will be kept vs removed
-5. Toggle the "Delete duplicated rows" option if needed (enabled by default)
+   - **NEW**: Expandable preview for large datasets (shows first 6 columns with "+X more" option)
+5. Configure data cleaning options (11 available options):
+   - Remove duplicates, empty rows/columns
+   - Trim whitespace, remove special characters
+   - Convert text case, remove leading zeros
+   - Replace N/A values and dashes with zeros
+   - Remove currency symbols
+   - **NEW**: Use "Check All" button to quickly select all available options
 6. Click "Clean the Data" to start processing
 
 ### Step 3: Download Results

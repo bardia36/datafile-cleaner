@@ -51,18 +51,22 @@ The Data Cleaner now features an intuitive three-card interface where each card 
 - **Actions**:
   - Review uploaded files with detailed information
   - Template is auto-selected based on Step 1 detection
-  - Preview column changes (keep vs remove)
+  - Preview column changes (keep vs remove) with expandable view for large datasets
   - **NEW**: Configure comprehensive cleaning options (none selected by default):
     - Remove duplicates, empty rows/columns
-    - Trim whitespace, normalize text
-    - Remove special characters, standardize dates
+    - Trim whitespace, remove special characters
     - Convert case, remove leading zeros
+    - Replace N/A values and dashes with zeros
+    - Remove currency symbols
+    - **NEW**: "Check All" button for quick selection of all available options
   - Click "Clean the Data" to process
 - **Completion**: Automatically moves to Step 3 when processing is finished
 - **New Features**:
-  - **10 cleaning criteria** with detailed descriptions
+  - **11 cleaning criteria** with detailed descriptions
   - **Default: No options selected** - user must choose what to apply
   - **Grid layout** for better organization of options
+  - **Expandable column preview** for datasets with many columns
+  - **Quick selection** with "Check All" button
 
 #### Step 3: Data Validation
 - **Purpose**: Results review and download
@@ -76,8 +80,9 @@ The Data Cleaner now features an intuitive three-card interface where each card 
 
 ### Dynamic Header
 - Shows context-aware subtitle based on current step
-- Progress indicator with dots showing completion status
+- **NEW**: Progress indicator positioned above the cat (bottom-right corner)
 - Step counter (e.g., "2/3")
+- **NEW**: Interactive theme toggle (click the cat to switch between light and dark modes)
 
 ### Smooth Animations
 - Cards animate in on page load with staggered timing
